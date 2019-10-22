@@ -41,8 +41,8 @@ int get_k(int N, int E) {
     return 2*E/N;
 }
 
-int get_delta(int N, int E) {
-    return 2*E/(N*(N-1));
+float get_delta(int N, int E) {
+    return 2*E/(float)(N*(N-1));
 }
 
 
@@ -51,7 +51,6 @@ int get_delta(int N, int E) {
 void add_string_value(Adjlist& adjlist, string word_a, string word_b) {
 
     if(adjlist.find(word_a) == adjlist.end()) {
-        cout << word_a << endl;
         adjlist[word_a] = set<string>();
     }
 
@@ -81,11 +80,20 @@ Adjlist read_language(string language) {
 void process_language(string language) {
     Adjlist adjlist = read_language(language);
 
+    int N = get_N(adjlist);
+    int E = get_E(adjlist);
+    int k = get_k(N, E);
+    float delta = get_delta(N, E);
+
+    cout << "N:" << N << " E: " << E << " <k>: " << k << " delta: " << delta << endl; 
+
     // compute......
 }
 
 int main() {
     string language = "Basque_syntactic_dependency_network.txt";
+
+    cout << "Lenguage: " << language << endl;
     process_language(language);
 }
 
