@@ -119,6 +119,7 @@ Adjlist read_language(string language)
     ifstream infile("dependency_networks/" + language);
 
     string a, b;
+    infile >> a >> b; // to ommit the header
     while (infile >> a >> b)
     {
         add_edge(adjlist, a, b);
