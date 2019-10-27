@@ -5,6 +5,8 @@
 #include <set>
 #include <map>
 #include <random>
+#include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -37,6 +39,7 @@ float get_delta(int N, int E)
 }
 
 // HELPERS
+
 void print_network_characteristics(Adjlist const &adjlist)
 {
     int N = get_N(adjlist);
@@ -110,6 +113,59 @@ vector<string> get_node_names(Adjlist adjlist)
     return names;
 }
 
+bool compare_node_degs(pair<string, int> const &a, pair<string, int> const &b)
+{
+    return a.second > b.second;
+}
+
+bool compare_node_degs_reverse(pair<string, int> const &a, pair<string, int> const &b)
+{
+    return b.second > a.second;
+}
+
+vector<pair<string, int>> get_nodes_with_degs(Adjlist network) 
+{
+    vector<pair<string, int>> nodes;
+    for(auto const &node : network)
+    {
+        string name = node.first;
+        int degree = node.first.size();
+        nodes.push_back(pair<string, int>(name, degree));
+    }
+    return nodes;
+}
+
+vector<string> get_strings(vector<pair<string, int>> pairs)
+{
+    vector<string> tmp;
+    for(auto const &pair : pairs)
+    {
+        tmp.push_back(pair.first);
+    }
+    return tmp;
+}
+
+vector<string> get_node_names_incr(Adjlist network)
+{
+    auto nodes = get_nodes_with_degs(network);
+    sort(nodes.begin(), nodes.end(), &compare_node_degs);
+    return get_strings(nodes);
+}
+
+vector<string> get_node_names_decr(Adjlist network)
+{
+    auto nodes = get_nodes_with_degs(network);
+    sort(nodes.begin(), nodes.end(), &compare_node_degs_reverse);
+    return get_strings(nodes);
+}
+
+vector<string> get_node_names_rand(Adjlist network)
+{
+    auto names = get_node_names(network);
+    random_shuffle(names.begin(), names.end());
+    return names;
+}
+
 // PREPROCESS
 Adjlist read_language(string language)
 {
@@ -129,56 +185,50 @@ Adjlist read_language(string language)
 }
 
 // MEASURE
-float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater = false, float value = 0.0) {
+float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater = false, float value = 0.0)
+{
     float sum = 0;
     int M = 0;
     int N = get_N(adjlist);
-
-    for(int i = 0; i < order.size(); i++) {
-
+    for (int i = 0; i < order.size(); i++)
+    {
         set<string> node = adjlist[order[i]];
-
         M++;
-
         int local_sum = 0;
         int num_pairs = 0;
-
-        if(node.size() > 1) { // convention that Ci = 0 if degree < 2
-
+        if (node.size() > 1)
+        { // convention that Ci = 0 if degree < 2
             auto y1 = node.begin();
-
-            for (int i = 0; i < node.size(); i++) {
+            for (int i = 0; i < node.size(); i++)
+            {
                 string a = y1->data();
 
                 auto y2 = node.begin();
                 advance(y2, i);
 
-                for(int j = i; j < node.size(); j++) {
+                for (int j = i; j < node.size(); j++)
+                {
                     string b = y2->data();
-                
-                    if(exists_edge(adjlist, a, b)) {
+                    if (exists_edge(adjlist, a, b))
+                    {
                         local_sum++;
                     }
                     num_pairs++;
-
                     y2++;
                 }
-
                 y1++;
             }
-
-            sum += local_sum/(float)num_pairs;
-
-            if(greater) {
-                if(sum/(float)N + 1 - M/(float)N < value) {
+            sum += local_sum / (float)num_pairs;
+            if (greater)
+            {
+                if (sum / (float)N + 1 - M / (float)N < value)
+                {
                     return 0;
                 }
             }
-
         }
     }
-    
-    return sum/(float) N;
+    return sum/(float)N;
 }
 
 // SWITCHING MODEL
@@ -322,43 +372,51 @@ Adjlist generate_erdos_renyi(vector<string> names, int N, int E)
 }
 
 // ALGORITHMS
-float p_monte_carlo_erdos_renyi(Adjlist adjlist, float x, int N, int E, int T) {
+float p_monte_carlo_erdos_renyi(Adjlist adjlist, float x, int N, int E, int T)
+{
     vector<string> names = get_node_names(adjlist);
     int times = 0;
-    for(int i = 0; i < T; i++) {
+    for (int i = 0; i < T; i++)
+    {
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
         float c_value = get_local_clustering(random_graph, names);
-        if(c_value > x) times++;
+        if (c_value > x)
+            times++;
     }
 
-    return times/(float) T;
+    return times / (float)T;
 }
 
-float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T) {
+float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T)
+{
     vector<string> names = get_node_names(adjlist);
     int times = 0;
-    for(int i = 0; i < T; i++) {
-        Adjlist random_graph = generate_switching_model(adjlist, 100);
+    for (int i = 0; i < T; i++)
+    {
+        Adjlist random_graph = generate_switching_model(adjlist, log(E));
         float c_value = get_local_clustering(random_graph, names);
-        if(c_value > x) times++;
+        if (c_value > x)
+            times++;
     }
 
-    return times/(float) T;
+    return times / (float)T;
 }
 
 // TODO: Test different orders passed to get_local_clustering (names vector)
-float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T) {
+float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
+{
     vector<string> names = get_node_names(adjlist);
     int times = 0;
-    for(int i = 0; i < T; i++) {
+    for (int i = 0; i < T; i++)
+    {
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
         float c_value = get_local_clustering(random_graph, names, true, x);
-        if(c_value > x) times++;
+        if (c_value > x)
+            times++;
     }
 
-    return times/(float) T;
+    return times / (float)T;
 }
-
 
 // MAIN
 
