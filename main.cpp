@@ -128,6 +128,46 @@ Adjlist read_language(string language)
     return adjlist;
 }
 
+// MEASURE
+float get_local_clustering(Adjlist adjlist) {
+    float sum = 0;
+    for (auto const &x : adjlist) {
+
+        int local_sum = 0;
+        int num_pairs = 0;
+
+        if(x.second.size() > 2) { // convention that Ci = 0 if degree <= 2
+
+            auto y1 = x.second.begin();
+
+            for (int i = 0; i < x.second.size(); i++) {
+                string a = y1->data();
+
+                auto y2 = x.second.begin();
+                advance(y2, i);
+
+                for(int j = i; j < x.second.size(); j++) {
+                    string b = y2->data();
+                
+                    if(exists_edge(adjlist, a, b)) {
+                        local_sum++;
+                    }
+                    num_pairs++;
+
+                    y2++;
+                }
+
+                y1++;
+            }
+
+            sum += local_sum/(float)num_pairs;
+
+        }
+    }
+    
+    return sum/(float) get_N(adjlist);
+}
+
 // SWITCHING MODEL
 typedef pair<string, string> Edge;
 
@@ -269,11 +309,15 @@ Adjlist generate_erdos_renyi(vector<string> names, int N, int E)
 }
 
 // ALGORITHMS
-float p_monte_carlo_erdos(vector<string> names, float x, int N, int E, int Q, int T) {
+float p_monte_carlo_erdos_renyi(vector<string> names, float x, int N, int E, int T) {
     int times = 0;
-    for(int i = 0; i < Q*T; i++) {
+    for(int i = 0; i < T; i++) {
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
+        float c_value = get_local_clustering(random_graph);
+        if(c_value > x) times++;
     }
+
+    return times/(float) T;
 }
 
 
@@ -289,6 +333,12 @@ void process_language(string language)
     float delta = get_delta(N, E);
 
     cout << "N:" << N << " E: " << E << " <k>: " << k << " delta: " << delta << endl;
+    
+    float x = get_local_clustering(adjlist);
+
+    cout << x << endl;
+
+    cout << p_monte_carlo_erdos_renyi(get_node_names(adjlist), x, N, E, 3) << endl;
 }
 
 int main()
