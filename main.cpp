@@ -268,14 +268,27 @@ Adjlist generate_erdos_renyi(vector<string> names, int N, int E)
     return adjlist;
 }
 
+// ALGORITHMS
+float p_monte_carlo_erdos(vector<string> names, float x, int N, int E, int Q, int T) {
+    int times = 0;
+    for(int i = 0; i < Q*T; i++) {
+        Adjlist random_graph = generate_erdos_renyi(names, N, E);
+    }
+}
+
+
 // MAIN
 
 void process_language(string language)
 {
     Adjlist adjlist = read_language(language);
-    Adjlist switching_model = generate_switching_model(adjlist, 5);
-    print_network_characteristics(adjlist);
-    print_network_characteristics(switching_model);
+
+    int N = get_N(adjlist);
+    int E = get_E(adjlist);
+    int k = get_k(N, E);
+    float delta = get_delta(N, E);
+
+    cout << "N:" << N << " E: " << E << " <k>: " << k << " delta: " << delta << endl;
 }
 
 int main()
