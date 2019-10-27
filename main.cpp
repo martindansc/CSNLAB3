@@ -129,24 +129,31 @@ Adjlist read_language(string language)
 }
 
 // MEASURE
-float get_local_clustering(Adjlist adjlist) {
+float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater = false, float value = 0.0) {
     float sum = 0;
-    for (auto const &x : adjlist) {
+    int M = 0;
+    int N = get_N(adjlist);
+
+    for(int i = 0; i < order.size(); i++) {
+
+        set<string> node = adjlist[order[i]];
+
+        M++;
 
         int local_sum = 0;
         int num_pairs = 0;
 
-        if(x.second.size() > 2) { // convention that Ci = 0 if degree <= 2
+        if(node.size() > 1) { // convention that Ci = 0 if degree < 2
 
-            auto y1 = x.second.begin();
+            auto y1 = node.begin();
 
-            for (int i = 0; i < x.second.size(); i++) {
+            for (int i = 0; i < node.size(); i++) {
                 string a = y1->data();
 
-                auto y2 = x.second.begin();
+                auto y2 = node.begin();
                 advance(y2, i);
 
-                for(int j = i; j < x.second.size(); j++) {
+                for(int j = i; j < node.size(); j++) {
                     string b = y2->data();
                 
                     if(exists_edge(adjlist, a, b)) {
@@ -162,10 +169,16 @@ float get_local_clustering(Adjlist adjlist) {
 
             sum += local_sum/(float)num_pairs;
 
+            if(greater) {
+                if(sum/(float)N + 1 - M/(float)N < value) {
+                    return 0;
+                }
+            }
+
         }
     }
     
-    return sum/(float) get_N(adjlist);
+    return sum/(float) N;
 }
 
 // SWITCHING MODEL
@@ -309,11 +322,37 @@ Adjlist generate_erdos_renyi(vector<string> names, int N, int E)
 }
 
 // ALGORITHMS
-float p_monte_carlo_erdos_renyi(vector<string> names, float x, int N, int E, int T) {
+float p_monte_carlo_erdos_renyi(Adjlist adjlist, float x, int N, int E, int T) {
+    vector<string> names = get_node_names(adjlist);
     int times = 0;
     for(int i = 0; i < T; i++) {
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
-        float c_value = get_local_clustering(random_graph);
+        float c_value = get_local_clustering(random_graph, names);
+        if(c_value > x) times++;
+    }
+
+    return times/(float) T;
+}
+
+float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T) {
+    vector<string> names = get_node_names(adjlist);
+    int times = 0;
+    for(int i = 0; i < T; i++) {
+        Adjlist random_graph = generate_switching_model(adjlist, 100);
+        float c_value = get_local_clustering(random_graph, names);
+        if(c_value > x) times++;
+    }
+
+    return times/(float) T;
+}
+
+// TODO: Test different orders passed to get_local_clustering (names vector)
+float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T) {
+    vector<string> names = get_node_names(adjlist);
+    int times = 0;
+    for(int i = 0; i < T; i++) {
+        Adjlist random_graph = generate_erdos_renyi(names, N, E);
+        float c_value = get_local_clustering(random_graph, names, true, x);
         if(c_value > x) times++;
     }
 
@@ -334,11 +373,13 @@ void process_language(string language)
 
     cout << "N:" << N << " E: " << E << " <k>: " << k << " delta: " << delta << endl;
     
-    float x = get_local_clustering(adjlist);
+    float x = get_local_clustering(adjlist, get_node_names(adjlist));
 
     cout << x << endl;
 
-    cout << p_monte_carlo_erdos_renyi(get_node_names(adjlist), x, N, E, 3) << endl;
+    cout << p_monte_carlo_erdos_renyi(adjlist, x, N, E, 3) << endl;
+    cout << p_monte_carlo_erdos_renyi_exact_optimization(adjlist, x, N, E, 3) << endl;
+    cout << p_monte_carlo_switching(adjlist, x, N, E, 3) << endl;
 }
 
 int main()
