@@ -1,0 +1,244 @@
+Language: Basque_syntactic_dependency_network.txt
+Switching model...
+T: 0 Printing random graph
+a: c e 
+b: c d 
+c: a b d 
+d: b c e 
+e: a d 
+
+C_value: 0.133333
+1 Printing random graph
+a: c d 
+b: c e 
+c: a b d 
+d: a c e 
+e: b d 
+
+C_value: 0.133333
+2 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+3 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+4 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+5 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+6 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+7 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+8 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+9 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+10 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+11 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+12 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+13 Printing random graph
+a: c d 
+b: c e 
+c: a b d 
+d: a c e 
+e: b d 
+
+C_value: 0.133333
+14 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+15 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+16 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+17 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+18 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+19 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+20 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+21 Printing random graph
+a: c d 
+b: c d 
+c: a b e 
+d: a b e 
+e: c d 
+
+C_value: 0
+22 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+23 Printing random graph
+a: c d 
+b: d e 
+c: a d e 
+d: a b c 
+e: b c 
+
+C_value: 0.133333
+24 Printing random graph
+a: c e 
+b: c d 
+c: a b d 
+d: b c e 
+e: a d 
+
+C_value: 0.133333
+25 Printing random graph
+a: c e 
+b: c d 
+c: a b d 
+d: b c e 
+e: a d 
+
+C_value: 0.133333
+26 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+27 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+28 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+29 Printing random graph
+a: d e 
+b: c d 
+c: b d e 
+d: a b c 
+e: a c 
+
+C_value: 0.133333
+
+p_val switching: 0.966667

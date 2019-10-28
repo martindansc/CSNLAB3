@@ -67,6 +67,13 @@ void print_adjlist(Adjlist adjlist)
     }
 }
 
+void print_adjlist_with_cluster(Adjlist adjlist, float value) {
+    cout << "Printing random graph" << endl;
+    print_adjlist(adjlist);
+    cout << endl;
+    cout << "C_value: " << value << endl;
+}
+
 bool add_string_value(Adjlist &adjlist, string word_a, string word_b)
 {
 
@@ -222,14 +229,16 @@ float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater =
             sum += local_sum / (float)num_pairs;
             if (greater)
             {
-                if (sum / (float)N + 1 - M / (float)N < value)
+                if (sum / (float)N + 1 - M / (float)N < value * 0.95)
                 {
-
+                    //print_adjlist_with_cluster(adjlist, sum / (float)N + 1 - M / (float)N);
                     return 0;
                 }
             }
         }
     }
+
+    //print_adjlist_with_cluster(adjlist, sum/(float)N);
     return sum/(float)N;
 }
 
@@ -381,7 +390,7 @@ float p_monte_carlo_erdos_renyi(Adjlist adjlist, float x, int N, int E, int T)
     {
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
         float c_value = get_local_clustering(random_graph, names);
-        if (c_value > x)
+        if (c_value >= x)
             times++;
     }
 
@@ -396,7 +405,7 @@ float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T)
     {
         Adjlist random_graph = generate_switching_model(adjlist, log(E));
         float c_value = get_local_clustering(random_graph, names);
-        if (c_value > x)
+        if (c_value >= x)
             times++;
     }
 
@@ -413,7 +422,7 @@ float p_monte_carlo_switching_exact_optimization(Adjlist adjlist, float x, int N
         cout << i << " " << flush;
         Adjlist random_graph = generate_switching_model(adjlist, (unsigned int)max((float)log(E), 10.0f));
         float c_value = get_local_clustering(random_graph, names, true, x);
-        if (c_value > x)
+        if (c_value >= x)
             times++;
     }
     cout << endl;
@@ -428,7 +437,7 @@ float p_monte_carlo_switching_approximate_optimization(Adjlist adjlist, float x,
     {
         Adjlist random_graph = generate_switching_model(adjlist, log(E));
         float c_value = get_local_clustering(random_graph, names, true, x, 0.1);
-        if (c_value > x)
+        if (c_value >= x)
             times++;
     }
 
@@ -446,7 +455,7 @@ float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int
         cout << i << " " << flush;
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
         float c_value = get_local_clustering(random_graph, names, true, x);
-        if (c_value > x)
+        if (c_value >= x)
             times++;
     }
     cout << endl;
@@ -470,12 +479,12 @@ void process_language(string language)
     float delta = get_delta(N, E);
     cout << "Switching model..." << endl;
     float p_switching = p_monte_carlo_switching_exact_optimization(adjlist, x, N, E, T);
+    cout << "p_val switching: " << p_switching << endl;
 
     cout << "Erdos model..." << endl;
     float p_erdos = p_monte_carlo_erdos_renyi_exact_optimization(adjlist, x, N, E, T);
-
-    cout << "p_val switching: " << p_switching << endl
-         << "p_val erdos: " << p_erdos << endl;
+    
+    cout << "p_val erdos: " << p_erdos << endl;
 
 }
 
@@ -508,7 +517,7 @@ void perform_ordering_tests(string const &language, vector<string> (*ordering)(A
 
 int main()
 {
-    std::vector<std::string> languages = {"Italian.txt"};
+    std::vector<std::string> languages = {"Basque_syntactic_dependency_network.txt"};
     std::vector<vector<string>(*)(Adjlist)> orderings;
     orderings.push_back(get_node_names);
     orderings.push_back(get_node_names_rand);
