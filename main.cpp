@@ -187,12 +187,12 @@ Adjlist read_language(string language)
 }
 
 // MEASURE
-float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater = false, float value = 0.0)
+float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater = false, float value = 0.0, float percent = 1.0)
 {
     float sum = 0;
     int M = 0;
     int N = get_N(adjlist);
-    for (int i = 0; i < order.size(); i++)
+    for (int i = 0; i < order.size()*percent; i++)
     {
         set<string> node = adjlist[order[i]];
         M++;
@@ -420,6 +420,21 @@ float p_monte_carlo_switching_exact_optimization(Adjlist adjlist, float x, int N
     return times / (float)T;
 }
 
+float p_monte_carlo_switching_approximate_optimization(Adjlist adjlist, float x, int N, int E, int T)
+{
+    vector<string> names = get_node_names(adjlist);
+    int times = 0;
+    for (int i = 0; i < T; i++)
+    {
+        Adjlist random_graph = generate_switching_model(adjlist, log(E));
+        float c_value = get_local_clustering(random_graph, names, true, x, 0.1);
+        if (c_value > x)
+            times++;
+    }
+
+    return times / (float)T;
+}
+
 
 float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
 {
@@ -437,6 +452,7 @@ float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int
     cout << endl;
     return times / (float)T;
 }
+
 
 // MAIN
 
