@@ -402,7 +402,6 @@ float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T)
     return times / (float)T;
 }
 
-// TODO: Test different orders passed to get_local_clustering (names vector)
 float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
 {
     vector<string> names = get_node_names(adjlist);
@@ -435,9 +434,8 @@ void process_language(string language)
 
     cout << x << endl;
 
-    cout << p_monte_carlo_erdos_renyi(adjlist, x, N, E, 3) << endl;
-    cout << p_monte_carlo_erdos_renyi_exact_optimization(adjlist, x, N, E, 3) << endl;
-    cout << p_monte_carlo_switching(adjlist, x, N, E, 3) << endl;
+    cout << p_monte_carlo_erdos_renyi(adjlist, x, N, E, 20) << endl;
+    cout << p_monte_carlo_erdos_renyi_exact_optimization(adjlist, x, N, E, 20) << endl;
 }
 
 int main()
