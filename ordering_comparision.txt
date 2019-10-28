@@ -1,0 +1,211 @@
+language: Arabic.txt
+Ordering 0
+Erdos: 
+Time difference = 727[ms]
+Switching: 
+Time difference = 17422[ms]
+Ordering 1
+Erdos: 
+Time difference = 733[ms]
+Switching: 
+Time difference = 29364[ms]
+Ordering 2
+Erdos: 
+Time difference = 723[ms]
+Switching: 
+Time difference = 2251[ms]
+Ordering 3
+Erdos: 
+Time difference = 724[ms]
+Switching: 
+Time difference = 29385[ms]
+language: Basque.txt
+Ordering 0
+Erdos: 
+Time difference = 189[ms]
+Switching: 
+Time difference = 2816[ms]
+Ordering 1
+Erdos: 
+Time difference = 190[ms]
+Switching: 
+Time difference = 2834[ms]
+Ordering 2
+Erdos: 
+Time difference = 185[ms]
+Switching: 
+Time difference = 2700[ms]
+Ordering 3
+Erdos: 
+Time difference = 185[ms]
+Switching: 
+Time difference = 2835[ms]
+language: Catalan.txt
+Ordering 0
+Erdos: 
+Time difference = 2429[ms]
+Switching: 
+Time difference = 135341[ms]
+Ordering 1
+Erdos: 
+Time difference = 2448[ms]
+Switching: 
+Time difference = 137782[ms]
+Ordering 2
+Erdos: 
+Time difference = 2420[ms]
+Switching: 
+Time difference = 11161[ms]
+Ordering 3
+Erdos: 
+Time difference = 2494[ms]
+Switching: 
+Time difference = 156335[ms]
+language: Chinese.txt
+Ordering 0
+Erdos: 
+Time difference = 2017[ms]
+Switching: 
+Time difference = 101201[ms]
+Ordering 1
+Erdos: 
+Time difference = 2427[ms]
+Switching: 
+Time difference = 112646[ms]
+Ordering 2
+Erdos: 
+Time difference = 2386[ms]
+Switching: 
+Time difference = 5815[ms]
+Ordering 3
+Erdos: 
+Time difference = 2364[ms]
+Switching: 
+Time difference = 119991[ms]
+language: Czech.txt
+Ordering 0
+Erdos: 
+Time difference = 3296[ms]
+Switching: 
+Time difference = 219142[ms]
+Ordering 1
+Erdos: 
+Time difference = 3360[ms]
+Switching: 
+Time difference = 222094[ms]
+Ordering 2
+Erdos: 
+Time difference = 3298[ms]
+Switching: 
+Time difference = 11130[ms]
+Ordering 3
+Erdos: 
+Time difference = 3323[ms]
+Switching: 
+Time difference = 204278[ms]
+
+language: English.txt
+Ordering 0
+Erdos: 
+Time difference = 2955[ms]
+Switching: 
+Time difference = 83966[ms]
+Ordering 1
+Erdos: 
+Time difference = 2541[ms]
+Switching: 
+Time difference = 98506[ms]
+Ordering 2
+Erdos: 
+Time difference = 2529[ms]
+Switching: 
+Time difference = 15471[ms]
+Ordering 3
+Erdos: 
+Time difference = 2513[ms]
+Switching: 
+Time difference = 98891[ms]
+language: Greek.txt
+Ordering 0
+Erdos: 
+Time difference = 439[ms]
+Switching: 
+Time difference = 8873[ms]
+Ordering 1
+Erdos: 
+Time difference = 455[ms]
+Switching: 
+Time difference = 9024[ms]
+Ordering 2
+Erdos: 
+Time difference = 443[ms]
+Switching: 
+Time difference = 6925[ms]
+Ordering 3
+Erdos: 
+Time difference = 447[ms]
+Switching: 
+Time difference = 9048[ms]
+language: Hungarian.txt
+Ordering 0
+Erdos: 
+Time difference = 1006[ms]
+Switching: 
+Time difference = 36432[ms]
+Ordering 1
+Erdos: 
+Time difference = 1033[ms]
+Switching: 
+Time difference = 36713[ms]
+Ordering 2
+Erdos: 
+Time difference = 1014[ms]
+Switching: 
+Time difference = 3123[ms]
+Ordering 3
+Erdos: 
+Time difference = 1014[ms]
+Switching: 
+Time difference = 36652[ms]
+language: Italian.txt
+Ordering 0
+Erdos: 
+Time difference = 516[ms]
+Switching: 
+Time difference = 12262[ms]
+Ordering 1
+Erdos: 
+Time difference = 521[ms]
+Switching: 
+Time difference = 12314[ms]
+Ordering 2
+Erdos: 
+Time difference = 519[ms]
+Switching: 
+Time difference = 1789[ms]
+Ordering 3
+Erdos: 
+Time difference = 517[ms]
+Switching: 
+Time difference = 12698[ms]
+language: Turkish.txt
+Ordering 0
+Erdos: 
+Time difference = 333[ms]
+Switching: 
+Time difference = 41650[ms]
+Ordering 1
+Erdos: 
+Time difference = 339[ms]
+Switching: 
+Time difference = 41608[ms]
+Ordering 2
+Erdos: 
+Time difference = 333[ms]
+Switching: 
+Time difference = 395[ms]
+Ordering 3
+Erdos: 
+Time difference = 334[ms]
+Switching: 
+Time difference = 41657[ms]
