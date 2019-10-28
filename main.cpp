@@ -405,16 +405,18 @@ float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T)
 
 float p_monte_carlo_switching_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
 {
-    vector<string> names = get_node_names(adjlist);
+    vector<string> names = get_node_names_incr(adjlist);
     int times = 0;
+    cout << "T: " << flush;
     for (int i = 0; i < T; i++)
     {
-        Adjlist random_graph = generate_switching_model(adjlist, log(E));
+        cout << i << " " << flush;
+        Adjlist random_graph = generate_switching_model(adjlist, (unsigned int)max((float)log(E), 10.0f));
         float c_value = get_local_clustering(random_graph, names, true, x);
         if (c_value > x)
             times++;
     }
-
+    cout << endl;
     return times / (float)T;
 }
 
@@ -423,14 +425,16 @@ float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int
 {
     vector<string> names = get_node_names_decr(adjlist);
     int times = 0;
+    cout << "T: " << flush;
     for (int i = 0; i < T; i++)
     {
+        cout << i << " " << flush;
         Adjlist random_graph = generate_erdos_renyi(names, N, E);
         float c_value = get_local_clustering(random_graph, names, true, x);
         if (c_value > x)
             times++;
     }
-
+    cout << endl;
     return times / (float)T;
 }
 
@@ -438,18 +442,25 @@ float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int
 
 void process_language(string language)
 {
+    cout << "Language: " << language << endl;
     Adjlist adjlist = read_language(language);
-    Adjlist switching_model = generate_switching_model(adjlist, 20);
+    vector<string> names = get_node_names(adjlist);
+
+    const int T = 30;
     float x = get_local_clustering(adjlist, get_node_names(adjlist));
     int N = get_N(adjlist);
     int E = get_E(adjlist);
     int k = get_k(N, E);
     float delta = get_delta(N, E);
+    cout << "Switching model..." << endl;
+    float p_switching = p_monte_carlo_switching_exact_optimization(adjlist, x, N, E, T);
+
+    cout << "Erdos model..." << endl;
+    float p_erdos = p_monte_carlo_erdos_renyi_exact_optimization(adjlist, x, N, E, T);
+
+    cout << "p_val switching: " << p_switching << endl
+         << "p_val erdos: " << p_erdos << endl;
     
-    chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    p_monte_carlo_switching_exact_optimization(adjlist, x, N, E, 1);
-    chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds> (end - begin).count() << "[ms]" << endl;
 }
 
 void perform_ordering_tests(string const &language, vector<string> (*ordering)(Adjlist))
@@ -481,7 +492,7 @@ void perform_ordering_tests(string const &language, vector<string> (*ordering)(A
 
 int main()
 {
-    std::vector<std::string> languages = {"English.txt", "Greek.txt", "Hungarian.txt", "Italian.txt", "Turkish.txt"};
+    std::vector<std::string> languages = {"Italian.txt"};
     std::vector<vector<string>(*)(Adjlist)> orderings;
     orderings.push_back(get_node_names);
     orderings.push_back(get_node_names_rand);
@@ -489,14 +500,9 @@ int main()
     orderings.push_back(get_node_names_decr);
     for (auto const &language : languages)
     {
-        cout << "language: " << language << endl;
-        int i = 0;
-        for (auto const &ordering : orderings)
-        {
-            cout << "Ordering " << i++ << endl;
-            perform_ordering_tests(language, ordering);
+        process_language(language);
         }
         
-    }
+
 
 }
