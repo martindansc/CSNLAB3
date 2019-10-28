@@ -472,7 +472,9 @@ void process_language(string language)
     vector<string> names = get_node_names(adjlist);
 
     const int T = 30;
+    cout << "Local clustering: ";
     float x = get_local_clustering(adjlist, get_node_names(adjlist));
+    cout << x << endl;
     int N = get_N(adjlist);
     int E = get_E(adjlist);
     int k = get_k(N, E);
@@ -517,7 +519,8 @@ void perform_ordering_tests(string const &language, vector<string> (*ordering)(A
 
 int main()
 {
-    std::vector<std::string> languages = {"Basque_syntactic_dependency_network.txt"};
+    std::vector<std::string> languages = {"Czech_syntactic_dependency_network.txt", "Catalan_syntactic_dependency_network.txt", 
+        "English_syntactic_dependency_network.txt", "Turkish_syntactic_dependency_network.txt", "Basque_syntactic_dependency_network.txt"};
     std::vector<vector<string>(*)(Adjlist)> orderings;
     orderings.push_back(get_node_names);
     orderings.push_back(get_node_names_rand);
@@ -527,7 +530,4 @@ int main()
     {
         process_language(language);
     }
-
-
-
 }
