@@ -204,7 +204,6 @@ float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater =
             for (int i = 0; i < node.size(); i++)
             {
                 string a = y1->data();
-
                 auto y2 = node.begin();
                 advance(y2, i);
 
@@ -225,6 +224,7 @@ float get_local_clustering(Adjlist adjlist, vector<string> order, bool greater =
             {
                 if (sum / (float)N + 1 - M / (float)N < value)
                 {
+
                     return 0;
                 }
             }
@@ -476,7 +476,7 @@ void process_language(string language)
 
     cout << "p_val switching: " << p_switching << endl
          << "p_val erdos: " << p_erdos << endl;
-    
+
 }
 
 void perform_ordering_tests(string const &language, vector<string> (*ordering)(Adjlist))
@@ -517,8 +517,8 @@ int main()
     for (auto const &language : languages)
     {
         process_language(language);
-        }
-        
+    }
+
 
 
 }

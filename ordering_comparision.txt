@@ -125,6 +125,7 @@ Erdos:
 Time difference = 2513[ms]
 Switching: 
 Time difference = 98891[ms]
+
 language: Greek.txt
 Ordering 0
 Erdos: 
@@ -146,6 +147,8 @@ Erdos:
 Time difference = 447[ms]
 Switching: 
 Time difference = 9048[ms]
+
+
 language: Hungarian.txt
 Ordering 0
 Erdos: 
