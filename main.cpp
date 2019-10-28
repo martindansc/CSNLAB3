@@ -7,6 +7,7 @@
 #include <random>
 #include <cmath>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -39,6 +40,7 @@ float get_delta(int N, int E)
 }
 
 // HELPERS
+
 
 void print_network_characteristics(Adjlist const &adjlist)
 {
@@ -354,7 +356,6 @@ Adjlist generate_switching_model(Adjlist const &network, unsigned int Q)
 Adjlist generate_erdos_renyi(vector<string> names, int N, int E)
 {
     Adjlist adjlist;
-
     vector<string> aux;
 
     int i = 0;
@@ -402,9 +403,25 @@ float p_monte_carlo_switching(Adjlist adjlist, float x, int N, int E, int T)
     return times / (float)T;
 }
 
-float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
+float p_monte_carlo_switching_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
 {
     vector<string> names = get_node_names(adjlist);
+    int times = 0;
+    for (int i = 0; i < T; i++)
+    {
+        Adjlist random_graph = generate_switching_model(adjlist, log(E));
+        float c_value = get_local_clustering(random_graph, names, true, x);
+        if (c_value > x)
+            times++;
+    }
+
+    return times / (float)T;
+}
+
+
+float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int N, int E, int T)
+{
+    vector<string> names = get_node_names_decr(adjlist);
     int times = 0;
     for (int i = 0; i < T; i++)
     {
@@ -422,26 +439,64 @@ float p_monte_carlo_erdos_renyi_exact_optimization(Adjlist adjlist, float x, int
 void process_language(string language)
 {
     Adjlist adjlist = read_language(language);
-
+    Adjlist switching_model = generate_switching_model(adjlist, 20);
+    float x = get_local_clustering(adjlist, get_node_names(adjlist));
     int N = get_N(adjlist);
     int E = get_E(adjlist);
     int k = get_k(N, E);
     float delta = get_delta(N, E);
-
-    cout << "N:" << N << " E: " << E << " <k>: " << k << " delta: " << delta << endl;
     
-    float x = get_local_clustering(adjlist, get_node_names(adjlist));
+    chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    p_monte_carlo_switching_exact_optimization(adjlist, x, N, E, 1);
+    chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds> (end - begin).count() << "[ms]" << endl;
+}
 
-    cout << x << endl;
-
-    cout << p_monte_carlo_erdos_renyi(adjlist, x, N, E, 20) << endl;
-    cout << p_monte_carlo_erdos_renyi_exact_optimization(adjlist, x, N, E, 20) << endl;
+void perform_ordering_tests(string const &language, vector<string> (*ordering)(Adjlist))
+{
+    Adjlist adjlist = read_language(language);
+    float x = get_local_clustering(adjlist, get_node_names_decr(adjlist));
+    int N = get_N(adjlist);
+    int E = get_E(adjlist);
+    int k = get_k(N, E);
+    float delta = get_delta(N, E);
+    Adjlist switching = generate_switching_model(adjlist, 20);
+    Adjlist erdos = generate_erdos_renyi(get_node_names(adjlist), N, E);
+    vector<string> order = ordering(switching);
+    {
+        cout << "Erdos: " << endl;
+        chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        get_local_clustering(erdos, order, true, x);
+        chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds> (end - begin).count() << "[ms]" << endl;
+    }
+    {
+        cout << "Switching: " << endl;
+        chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        get_local_clustering(switching, order, true, x);
+        chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        cout << "Time difference = " << chrono::duration_cast<chrono::milliseconds> (end - begin).count() << "[ms]" << endl;
+    }
 }
 
 int main()
 {
-    string language = "Basque_syntactic_dependency_network.txt";
+    std::vector<std::string> languages = {"English.txt", "Greek.txt", "Hungarian.txt", "Italian.txt", "Turkish.txt"};
+    std::vector<vector<string>(*)(Adjlist)> orderings;
+    orderings.push_back(get_node_names);
+    orderings.push_back(get_node_names_rand);
+    orderings.push_back(get_node_names_incr);
+    orderings.push_back(get_node_names_decr);
+    for (auto const &language : languages)
+    {
+        cout << "language: " << language << endl;
+        int i = 0;
+        for (auto const &ordering : orderings)
+        {
+            cout << "Ordering " << i++ << endl;
+            perform_ordering_tests(language, ordering);
+        }
+        
+    }
 
-    cout << "Lenguage: " << language << endl;
-    process_language(language);
 }
